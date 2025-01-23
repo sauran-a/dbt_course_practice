@@ -1,0 +1,69 @@
+version: 2
+sources:
+  - name: demo_src
+    database: dwh_flight
+    schema: demo_src
+    description: Данные из БД авиаперелетов
+    tables:
+      - name: boarding_passes
+        description: Посадочные талоны
+        columns: 
+          - name: ticket_no
+            description: Номер билета
+          - name: flight_id
+            description: Идентификатор рейса
+          - name: boarding_no
+            description: Номер посадочного талона
+          - name: seat_no
+            description: Номер места
+      - name: flights
+        description: Рейсы
+        freshness: 
+          warn_after: {count: 600000, period: hour}
+          error_after: {count: 10000, period: day}
+        loaded_at_field: actual_departure::timestamp
+        columns: 
+          - name: flight_id
+            description: Идентификатор рейса
+          - name: flight_no
+            description: Номер рейса
+          - name: scheduled_departure
+            description: Запланированное время вылета
+          - name: scheduled_arrival
+            description: Запланированное время прилета
+          - name: departure_airport
+            description: Аэропорт вылета
+          - name: arrival_airport
+            description: Аэропорт прилета
+          - name: status
+            description: Статус
+          - name: aircraft_code
+            description: Идентификатор самолета
+          - name: actual_departure
+            description: Фактическое время вылета
+          - name: actual_arrival
+            description: Фактическое время прилета
+      - name: ticket_flights
+        description: Билеты на рейсы
+        columns: 
+          - name: ticket_no
+            description: Номер билета
+          - name: flight_id
+            description: Идентификатор рейса
+          - name: fare_conditions
+            description: Условия тарифа
+          - name: amount
+            description: Сумма
+      - name: tickets
+        description: Билеты
+        columns: 
+          - name: ticket_no
+            description: Номер билета
+          - name: book_ref
+            description: Идентификатор бронирования
+          - name: passenger_id
+            description: Идентификатор пассажира
+          - name: passenger_name
+            description: Имя пассажира
+          - name: contact_data
+            description: Контактные данные
